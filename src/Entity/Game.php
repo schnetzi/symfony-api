@@ -35,14 +35,14 @@ class Game
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
      */
-    private $home_team_id;
+    private $home_team;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_away")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
      */
-    private $away_team_id;
+    private $away_team;
 
     /**
      * @ORM\Column(type="datetime")
@@ -61,26 +61,26 @@ class Game
         return $this->id;
     }
 
-    public function getHomeTeamId(): ?Team
+    public function getHomeTeam(): ?Team
     {
-        return $this->home_team_id;
+        return $this->home_team;
     }
 
-    public function setHomeTeamId(?Team $home_team_id): self
+    public function setHomeTeam(?Team $home_team): self
     {
-        $this->home_team_id = $home_team_id;
+        $this->home_team = $home_team;
 
         return $this;
     }
 
-    public function getAwayTeamId(): ?Team
+    public function getAwayTeam(): ?Team
     {
-        return $this->away_team_id;
+        return $this->away_team;
     }
 
-    public function setAwayTeamId(?Team $away_team_id): self
+    public function setAwayTeam(?Team $away_team): self
     {
-        $this->away_team_id = $away_team_id;
+        $this->away_team = $away_team;
 
         return $this;
     }
@@ -93,7 +93,7 @@ class Game
     /**
      * Show the human readable time diff in German.
      *
-     * @Groups({"game:read", "game:write"})
+     * @Groups({"game:read"})
      */
     public function getDateDiff(): string
     {

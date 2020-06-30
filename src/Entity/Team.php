@@ -70,12 +70,12 @@ class Team
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="home_team_id")
+     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="home_team")
      */
     private $games_home;
 
     /**
-     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="away_team_id")
+     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="away_team")
      */
     private $games_away;
 
@@ -156,7 +156,7 @@ class Team
     {
         if (!$this->games_home->contains($homeGame)) {
             $this->games_home[] = $homeGame;
-            $homeGame->setHomeTeamId($this);
+            $homeGame->setHomeTeam($this);
         }
 
         return $this;
@@ -167,8 +167,8 @@ class Team
         if ($this->games_home->contains($homeGame)) {
             $this->games_home->removeElement($homeGame);
             // set the owning side to null (unless already changed)
-            if ($homeGame->getHomeTeamId() === $this) {
-                $homeGame->setHomeTeamId(null);
+            if ($homeGame->getHomeTeam() === $this) {
+                $homeGame->setHomeTeam(null);
             }
         }
 
@@ -187,7 +187,7 @@ class Team
     {
         if (!$this->games_away->contains($gamesAway)) {
             $this->games_away[] = $gamesAway;
-            $gamesAway->setAwayTeamId($this);
+            $gamesAway->setAwayTeam($this);
         }
 
         return $this;
@@ -198,8 +198,8 @@ class Team
         if ($this->games_away->contains($gamesAway)) {
             $this->games_away->removeElement($gamesAway);
             // set the owning side to null (unless already changed)
-            if ($gamesAway->getAwayTeamId() === $this) {
-                $gamesAway->setAwayTeamId(null);
+            if ($gamesAway->getAwayTeam() === $this) {
+                $gamesAway->setAwayTeam(null);
             }
         }
 
