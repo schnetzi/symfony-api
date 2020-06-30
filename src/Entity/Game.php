@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\GameRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +22,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   }
  * )
  * @ORM\Entity(repositoryClass=GameRepository::class)
+ * @ApiFilter(
+ * 	SearchFilter::class,
+ * 	properties={
+ * 		"home_team": "exact",
+ * 		"away_team": "exact"
+ * 	}
+ * )
  */
 class Game
 {
@@ -35,14 +44,14 @@ class Game
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
      */
-    private $home_team;
+    public $home_team;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_away")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
      */
-    private $away_team;
+    public $away_team;
 
     /**
      * @ORM\Column(type="datetime")

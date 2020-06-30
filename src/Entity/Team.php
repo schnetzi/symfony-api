@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\TeamRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +24,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *   }
  * )
  * @ORM\Entity(repositoryClass=TeamRepository::class)
+ * @ApiFilter(SearchFilter::class, properties={"name": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"group_name": "exact"})
  */
 class Team
 {
@@ -46,7 +50,7 @@ class Team
      * @ORM\Column(type="string", length=2)
      * @Groups({"team:read", "team:write"})
      */
-    private $group_name;
+    public $group_name;
 
     /**
      * The initial position of the team in the group.
@@ -62,7 +66,7 @@ class Team
      * @ORM\Column(type="smallint", nullable=true)
      * @Groups({"team:read", "team:write"})
      */
-    private $final_position;
+    public $final_position;
 
     /**
      * @ORM\Column(type="datetime")
@@ -79,8 +83,11 @@ class Team
      */
     private $games_away;
 
-    public function __construct()
+    public function __construct(string $name = null, string $group_name = null, int $position = null)
     {
+        $this->name = $name;
+        $this->group_name = $group_name;
+        $this->position = $position;
         $this->createdAt = new DateTimeImmutable();
         $this->games_home = new ArrayCollection();
         $this->games_away = new ArrayCollection();
@@ -96,35 +103,14 @@ class Team
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getGroupName(): ?string
     {
         return $this->group_name;
     }
 
-    public function setGroupName(string $group_name): self
-    {
-        $this->group_name = $group_name;
-
-        return $this;
-    }
-
     public function getPosition(): ?int
     {
         return $this->position;
-    }
-
-    public function setPosition(int $position): self
-    {
-        $this->position = $position;
-
-        return $this;
     }
 
     public function getFinalPosition(): ?int
