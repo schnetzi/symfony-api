@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -41,6 +42,7 @@ class Team
      *
      * @ORM\Column(type="string", length=255)
      * @Groups({"team:read", "team:write"})
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -49,6 +51,11 @@ class Team
      *
      * @ORM\Column(type="string", length=2)
      * @Groups({"team:read", "team:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     * 	max=1,
+     * 	maxMessage="Set a group name from A to F"
+     * )
      */
     public $group_name;
 
@@ -57,6 +64,7 @@ class Team
      *
      * @ORM\Column(type="smallint")
      * @Groups({"team:read", "team:write"})
+     * @Assert\NotBlank()
      */
     private $position;
 

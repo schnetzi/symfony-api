@@ -9,6 +9,7 @@ use App\Repository\GameRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -43,6 +44,7 @@ class Game
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_home")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
+     * @Assert\NotBlank()
      */
     public $home_team;
 
@@ -50,18 +52,21 @@ class Game
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_away")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"game:read", "game:write"})
+     * @Assert\NotBlank()
      */
     public $away_team;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"game:read", "game:write"})
+     * @Assert\NotBlank()
      */
     private $date;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"game:read", "game:write"})
+     * @Assert\NotBlank()
      */
     private $city;
 
