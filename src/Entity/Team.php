@@ -15,8 +15,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *   collectionOperations={"get", "post"},
- *   itemOperations={"get", "patch"},
+ *   collectionOperations={
+ *     "get", "post"
+ *   },
+ *   itemOperations={
+ *     "get"={
+ *       "normalization_context"={
+ *         "groups"={
+ *           "team:read", "team:item:get"
+ *         }
+ *       }
+ *     },
+ *     "patch"
+ *   },
  *   normalizationContext={
  *     "groups"={"team:read"}
  *   },
@@ -41,7 +52,7 @@ class Team
      * The team name in German.
      *
      * @ORM\Column(type="string", length=255)
-     * @Groups({"team:read", "team:write"})
+     * @Groups({"team:read", "team:write", "game:read"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -84,12 +95,12 @@ class Team
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="homeTeam")
      */
-    private $games_home;
+    private $gamesHome;
 
     /**
      * @ORM\OneToMany(targetEntity=Game::class, mappedBy="awayTeam")
      */
-    private $games_away;
+    private $gamesAway;
 
     public function __construct(string $name = null, string $groupName = null, int $position = null)
     {
@@ -97,8 +108,8 @@ class Team
         $this->groupName = $groupName;
         $this->position = $position;
         $this->createdAt = new DateTimeImmutable();
-        $this->games_home = new ArrayCollection();
-        $this->games_away = new ArrayCollection();
+        $this->gamesHome = new ArrayCollection();
+        $this->gamesAway = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,30 +150,42 @@ class Team
     }
 
     /**
-     * @return Collection|Game[]
+     * Get all games of a team.
+     *
+     * @Groups({"team:item:get"})
      */
-    public function getHomeGames(): Collection
+    public function getGames(): Collection
     {
-        return $this->games_home;
+        return new ArrayCollection(
+                array_merge($this->gamesHome->toArray(), $this->gamesAway->toArray())
+            );
     }
 
-    public function addHomeGame(Game $homeGame): self
+    /**
+     * @return Collection|Game[]
+     */
+    public function getGamesHome(): Collection
     {
-        if (!$this->games_home->contains($homeGame)) {
-            $this->games_home[] = $homeGame;
-            $homeGame->setHomeTeam($this);
+        return $this->gamesHome;
+    }
+
+    public function addGamesHome(Game $gamesHome): self
+    {
+        if (!$this->gamesHome->contains($gamesHome)) {
+            $this->gamesHome[] = $gamesHome;
+            $gamesHome->setHomeTeam($this);
         }
 
         return $this;
     }
 
-    public function removeHomeGame(Game $homeGame): self
+    public function removeGamesHome(Game $gamesHome): self
     {
-        if ($this->games_home->contains($homeGame)) {
-            $this->games_home->removeElement($homeGame);
+        if ($this->gamesHome->contains($gamesHome)) {
+            $this->gamesHome->removeElement($gamesHome);
             // set the owning side to null (unless already changed)
-            if ($homeGame->getHomeTeam() === $this) {
-                $homeGame->setHomeTeam(null);
+            if ($gamesHome->getHomeTeam() === $this) {
+                $gamesHome->setHomeTeam(null);
             }
         }
 
@@ -174,13 +197,13 @@ class Team
      */
     public function getGamesAway(): Collection
     {
-        return $this->games_away;
+        return $this->gamesAway;
     }
 
     public function addGamesAway(Game $gamesAway): self
     {
-        if (!$this->games_away->contains($gamesAway)) {
-            $this->games_away[] = $gamesAway;
+        if (!$this->gamesAway->contains($gamesAway)) {
+            $this->gamesAway[] = $gamesAway;
             $gamesAway->setAwayTeam($this);
         }
 
@@ -189,8 +212,8 @@ class Team
 
     public function removeGamesAway(Game $gamesAway): self
     {
-        if ($this->games_away->contains($gamesAway)) {
-            $this->games_away->removeElement($gamesAway);
+        if ($this->gamesAway->contains($gamesAway)) {
+            $this->gamesAway->removeElement($gamesAway);
             // set the owning side to null (unless already changed)
             if ($gamesAway->getAwayTeam() === $this) {
                 $gamesAway->setAwayTeam(null);

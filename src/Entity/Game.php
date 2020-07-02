@@ -41,31 +41,31 @@ class Game
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_home")
+     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="gamesHome")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"game:read", "game:write"})
+     * @Groups({"game:read", "game:write", "team:read"})
      * @Assert\NotBlank()
      */
     private $homeTeam;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_away")
+     * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="gamesAway")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"game:read", "game:write"})
+     * @Groups({"game:read", "game:write", "team:read"})
      * @Assert\NotBlank()
      */
     private $awayTeam;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"game:read", "game:write"})
+     * @Groups({"game:read", "game:write", "team:read"})
      * @Assert\NotBlank()
      */
     private $date;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"game:read", "game:write"})
+     * @Groups({"game:read", "game:write", "team:read"})
      * @Assert\NotBlank()
      */
     private $city;
