@@ -14,12 +14,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- * 	 collectionOperations={"get", "post"},
- *   itemOperations={"get"},
- * 	 normalizationContext={
+ *   collectionOperations={
+ *     "get",
+ *     "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *   },
+ *   itemOperations={
+ *     "get",
+ *     "patch"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN')"}
+ *   },
+ *   normalizationContext={
  *     "groups"={"game:read"}
  *   },
- * 	 denormalizationContext={
+ *   denormalizationContext={
  *     "groups"={"game:write"}
  *   }
  * )
@@ -27,8 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(
  * 	SearchFilter::class,
  * 	properties={
- * 		"homeTeam": "exact",
- * 		"awayTeam": "exact",
+ *    "homeTeam": "exact",
+ *    "awayTeam": "exact",
  *    "homeTeam.name": "partial",
  *    "awayTeam.name": "partial"
  * 	}

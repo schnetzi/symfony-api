@@ -17,7 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *   collectionOperations={
- *     "get", "post"
+ *     "get",
+ *     "post"={"security"="is_granted('ROLE_ADMIN')"}
  *   },
  *   itemOperations={
  *     "get"={
@@ -27,7 +28,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         }
  *       }
  *     },
- *     "patch"
+ *     "patch"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN')"}
  *   },
  *   normalizationContext={
  *     "groups"={"team:read"}
