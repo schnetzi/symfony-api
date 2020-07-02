@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  * @ApiFilter(SearchFilter::class, properties={"name": "exact"})
- * @ApiFilter(SearchFilter::class, properties={"group_name": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"groupName": "exact"})
  */
 class Team
 {
@@ -57,7 +57,7 @@ class Team
      * 	maxMessage="Set a group name from A to F"
      * )
      */
-    public $group_name;
+    private $groupName;
 
     /**
      * The initial position of the team in the group.
@@ -74,7 +74,7 @@ class Team
      * @ORM\Column(type="smallint", nullable=true)
      * @Groups({"team:read", "team:write"})
      */
-    public $final_position;
+    private $finalPosition;
 
     /**
      * @ORM\Column(type="datetime")
@@ -82,19 +82,19 @@ class Team
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="home_team")
+     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="homeTeam")
      */
     private $games_home;
 
     /**
-     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="away_team")
+     * @ORM\OneToMany(targetEntity=Game::class, mappedBy="awayTeam")
      */
     private $games_away;
 
-    public function __construct(string $name = null, string $group_name = null, int $position = null)
+    public function __construct(string $name = null, string $groupName = null, int $position = null)
     {
         $this->name = $name;
-        $this->group_name = $group_name;
+        $this->groupName = $groupName;
         $this->position = $position;
         $this->createdAt = new DateTimeImmutable();
         $this->games_home = new ArrayCollection();
@@ -113,7 +113,7 @@ class Team
 
     public function getGroupName(): ?string
     {
-        return $this->group_name;
+        return $this->groupName;
     }
 
     public function getPosition(): ?int
@@ -123,12 +123,12 @@ class Team
 
     public function getFinalPosition(): ?int
     {
-        return $this->final_position;
+        return $this->finalPosition;
     }
 
-    public function setFinalPosition(?int $final_position): self
+    public function setFinalPosition(?int $finalPosition): self
     {
-        $this->final_position = $final_position;
+        $this->finalPosition = $finalPosition;
 
         return $this;
     }

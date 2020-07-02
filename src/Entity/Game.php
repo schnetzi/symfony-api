@@ -26,8 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(
  * 	SearchFilter::class,
  * 	properties={
- * 		"home_team": "exact",
- * 		"away_team": "exact"
+ * 		"homeTeam": "exact",
+ * 		"awayTeam": "exact"
  * 	}
  * )
  */
@@ -46,7 +46,7 @@ class Game
      * @Groups({"game:read", "game:write"})
      * @Assert\NotBlank()
      */
-    public $home_team;
+    private $homeTeam;
 
     /**
      * @ORM\ManyToOne(targetEntity=Team::class, inversedBy="games_away")
@@ -54,7 +54,7 @@ class Game
      * @Groups({"game:read", "game:write"})
      * @Assert\NotBlank()
      */
-    public $away_team;
+    private $awayTeam;
 
     /**
      * @ORM\Column(type="datetime")
@@ -77,24 +77,24 @@ class Game
 
     public function getHomeTeam(): ?Team
     {
-        return $this->home_team;
+        return $this->homeTeam;
     }
 
-    public function setHomeTeam(?Team $home_team): self
+    public function setHomeTeam(?Team $homeTeam): self
     {
-        $this->home_team = $home_team;
+        $this->homeTeam = $homeTeam;
 
         return $this;
     }
 
     public function getAwayTeam(): ?Team
     {
-        return $this->away_team;
+        return $this->awayTeam;
     }
 
-    public function setAwayTeam(?Team $away_team): self
+    public function setAwayTeam(?Team $awayTeam): self
     {
-        $this->away_team = $away_team;
+        $this->awayTeam = $awayTeam;
 
         return $this;
     }
