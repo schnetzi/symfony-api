@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\GameRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,9 +28,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 	SearchFilter::class,
  * 	properties={
  * 		"homeTeam": "exact",
- * 		"awayTeam": "exact"
+ * 		"awayTeam": "exact",
+ *    "homeTeam.name": "partial",
+ *    "awayTeam.name": "partial"
  * 	}
  * )
+ * @ApiFilter(PropertyFilter::class)
  */
 class Game
 {

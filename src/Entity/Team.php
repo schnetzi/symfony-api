@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\TeamRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,6 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=TeamRepository::class)
  * @ApiFilter(SearchFilter::class, properties={"name": "exact"})
  * @ApiFilter(SearchFilter::class, properties={"groupName": "exact"})
+ * @ApiFilter(PropertyFilter::class)
  */
 class Team
 {
