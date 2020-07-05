@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -65,9 +67,15 @@ class User implements UserInterface
 	 */
 	private $createdAt;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=TipTicket::class, mappedBy="user", orphanRemoval=true)
+	 */
+	private $tipTickets;
+
 	public function __construct()
 	{
 		$this->createdAt = new DateTimeImmutable();
+		$this->tipTickets = new ArrayCollection();
 	}
 
 	public function getId(): ?int
@@ -158,5 +166,36 @@ class User implements UserInterface
 	public function getCreatedAt(): ?\DateTimeInterface
 	{
 		return $this->createdAt;
+	}
+
+	/**
+	 * @return Collection|TipTicket[]
+	 */
+	public function getTipTickets(): Collection
+	{
+		return $this->tipTickets;
+	}
+
+	public function addTipTicket(TipTicket $tipTicket): self
+	{
+		if (!$this->tipTickets->contains($tipTicket)) {
+			$this->tipTickets[] = $tipTicket;
+			$tipTicket->setUser($this);
+		}
+
+		return $this;
+	}
+
+	public function removeTipTicket(TipTicket $tipTicket): self
+	{
+		if ($this->tipTickets->contains($tipTicket)) {
+			$this->tipTickets->removeElement($tipTicket);
+			// set the owning side to null (unless already changed)
+			if ($tipTicket->getUser() === $this) {
+				$tipTicket->setUser(null);
+			}
+		}
+
+		return $this;
 	}
 }

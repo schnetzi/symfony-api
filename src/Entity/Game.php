@@ -8,6 +8,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Repository\GameRepository;
 use Carbon\Carbon;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -81,6 +83,16 @@ class Game
 	 */
 	private $city;
 
+	/**
+	 * @ORM\OneToMany(targetEntity=Tip::class, mappedBy="game", orphanRemoval=true)
+	 */
+	private $tips;
+
+	public function __construct()
+	{
+		$this->tips = new ArrayCollection();
+	}
+
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -142,6 +154,37 @@ class Game
 	public function setCity(string $city): self
 	{
 		$this->city = $city;
+
+		return $this;
+	}
+
+	/**
+	 * @return Collection|Tip[]
+	 */
+	public function getTips(): Collection
+	{
+		return $this->tips;
+	}
+
+	public function addTip(Tip $tip): self
+	{
+		if (!$this->tips->contains($tip)) {
+			$this->tips[] = $tip;
+			$tip->setGame($this);
+		}
+
+		return $this;
+	}
+
+	public function removeTip(Tip $tip): self
+	{
+		if ($this->tips->contains($tip)) {
+			$this->tips->removeElement($tip);
+			// set the owning side to null (unless already changed)
+			if ($tip->getGame() === $this) {
+				$tip->setGame(null);
+			}
+		}
 
 		return $this;
 	}
