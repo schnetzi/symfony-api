@@ -9,6 +9,8 @@ return PhpCsFixer\Config::create()
     ->setRules([
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
+				'indentation_type' => true,
     ])
+		->setIndent("\t")
     ->setFinder($finder)
 ;

@@ -26,137 +26,137 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+	/**
+	 * @ORM\Id()
+	 * @ORM\GeneratedValue()
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write"})
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
-    private $email;
+	/**
+	 * @ORM\Column(type="string", length=180, unique=true)
+	 * @Groups({"user:read", "user:write"})
+	 * @Assert\NotBlank()
+	 * @Assert\Email()
+	 */
+	private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+	/**
+	 * @ORM\Column(type="json")
+	 */
+	private $roles = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     * @Groups({"user:write"})
-     */
-    private $password;
+	/**
+	 * @var string The hashed password
+	 * @ORM\Column(type="string")
+	 * @Groups({"user:write"})
+	 */
+	private $password;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user:read", "user:write"})
-     * @Assert\NotBlank()
-     */
-    private $username;
+	/**
+	 * @ORM\Column(type="string", length=255, unique=true)
+	 * @Groups({"user:read", "user:write"})
+	 * @Assert\NotBlank()
+	 */
+	private $username;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $createdAt;
 
-    public function __construct()
-    {
-        $this->createdAt = new DateTimeImmutable();
-    }
+	public function __construct()
+	{
+		$this->createdAt = new DateTimeImmutable();
+	}
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+	public function getEmail(): ?string
+	{
+		return $this->email;
+	}
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
+	public function setEmail(string $email): self
+	{
+		$this->email = $email;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->username;
-    }
+	/**
+	 * A visual identifier that represents this user.
+	 *
+	 * @see UserInterface
+	 */
+	public function getUsername(): string
+	{
+		return (string) $this->username;
+	}
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+	/**
+	 * @see UserInterface
+	 */
+	public function getRoles(): array
+	{
+		$roles = $this->roles;
+		// guarantee every user at least has ROLE_USER
+		$roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
-    }
+		return array_unique($roles);
+	}
 
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
+	public function setRoles(array $roles): self
+	{
+		$this->roles = $roles;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
-    {
-        return (string) $this->password;
-    }
+	/**
+	 * @see UserInterface
+	 */
+	public function getPassword(): string
+	{
+		return (string) $this->password;
+	}
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
+	public function setPassword(string $password): self
+	{
+		$this->password = $password;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
+	/**
+	 * @see UserInterface
+	 */
+	public function getSalt()
+	{
+		// not needed when using the "bcrypt" algorithm in security.yaml
+	}
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+	/**
+	 * @see UserInterface
+	 */
+	public function eraseCredentials()
+	{
+		// If you store any temporary, sensitive data on the user, clear it here
+		// $this->plainPassword = null;
+	}
 
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
+	public function setUsername(string $username): self
+	{
+		$this->username = $username;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
+	public function getCreatedAt(): ?\DateTimeInterface
+	{
+		return $this->createdAt;
+	}
 }

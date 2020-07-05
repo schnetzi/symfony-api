@@ -9,26 +9,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="app_login", methods={"POST"})
-     */
-    public function login(IriConverterInterface $iriConverter)
-    {
-        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $this->json([
-                    'error' => 'Invalid login request: Check that the Content-Type header is "application/json"',
-                        ], 400);
-        }
+	/**
+	 * @Route("/login", name="app_login", methods={"POST"})
+	 */
+	public function login(IriConverterInterface $iriConverter)
+	{
+		if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+			$this->json([
+				'error' => 'Invalid login request: Check that the Content-Type header is "application/json"',
+			], 400);
+		}
 
-        return new Response(null, 204, [
-                    'Location' => $iriConverter->getIriFromItem($this->getUser()),
-                ]);
-    }
+		return new Response(null, 204, [
+			'Location' => $iriConverter->getIriFromItem($this->getUser()),
+		]);
+	}
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout()
-    {
-    }
+	/**
+	 * @Route("/logout", name="app_logout")
+	 */
+	public function logout()
+	{
+	}
 }
