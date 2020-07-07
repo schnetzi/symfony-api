@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\TipRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -10,6 +12,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *   collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "post"={"security"="is_granted('ROLE_USER')"}
+ *   },
+ *	itemOperations={
+ *		"get"={"security"="is_granted('ROLE_USER')"},
+ *		"put"={"security"="is_granted('TIP_EDIT', object)"},
+ * 		"delete"={"security"="is_granted('ROLE_USER') and object.getTipTicket.getUser() == user"}
+ *	},
  * 	 normalizationContext={
  *     "groups"={"tip:read"}
  *   },
@@ -18,6 +29,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *   }
  * )
  * @ORM\Entity(repositoryClass=TipRepository::class)
+ * @ApiFilter(
+ *  SearchFilter::class,
+ *  properties={
+ *    "tipTicket": "exact",
+ *  }
+ * )
  */
 class Tip
 {

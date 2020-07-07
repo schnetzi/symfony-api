@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         }
  *       }
  *     },
- *     "patch"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN')"}
  *   },
  *   normalizationContext={

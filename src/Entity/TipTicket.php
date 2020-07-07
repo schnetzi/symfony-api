@@ -12,12 +12,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- * 	 normalizationContext={
- *     "groups"={"tip_ticket:read"}
+ *   collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "post"={"security"="is_granted('ROLE_USER')"}
  *   },
- * 	 denormalizationContext={
- *     "groups"={"tip_ticket:write"}
- *   }
+ *	itemOperations={
+ *		"get"={"security"="is_granted('ROLE_USER')"},
+ *		"put"={"security"="is_granted('ROLE_USER') and object.getUser() == user"},
+ * 		"delete"={"security"="is_granted('ROLE_USER')"}
+ *	},
+ *	normalizationContext={
+ *		"groups"={"tip_ticket:read"}
+ *	},
+ *	denormalizationContext={
+ *		"groups"={"tip_ticket:write"}
+ *	}
  * )
  * @ORM\Entity(repositoryClass=TipTicketRepository::class)
  */
