@@ -21,7 +21,7 @@ class CustomApiTestCase extends ApiTestCase
 
 		$user->setPassword($encoded);
 
-		$entityManager = self::$container->get(EntityManagerInterface::class);
+		$entityManager = $this->getEntityManager();
 		$entityManager->persist($user);
 		$entityManager->flush();
 
@@ -46,5 +46,10 @@ class CustomApiTestCase extends ApiTestCase
 		$this->login($client, $email, $password);
 
 		return $user;
+	}
+
+	protected function getEntityManager(): EntityManagerInterface
+	{
+		return self::$container->get(EntityManagerInterface::class);
 	}
 }
