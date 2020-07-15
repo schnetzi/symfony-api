@@ -11,21 +11,34 @@ final class AdminGroupsContextBuilder implements SerializerContextBuilderInterfa
 	private $decorated;
 	private $authorizationChecker;
 
-	public function __construct(SerializerContextBuilderInterface $decorated, AuthorizationCheckerInterface $authorizationChecker)
-	{
+	public function __construct(
+		SerializerContextBuilderInterface $decorated,
+		AuthorizationCheckerInterface $authorizationChecker
+	) {
 		$this->decorated = $decorated;
 		$this->authorizationChecker = $authorizationChecker;
 	}
 
-	public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
-	{
-		$context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
+	public function createFromRequest(
+		Request $request,
+		bool $normalization,
+		?array $extractedAttributes = null
+	): array {
+		$context = $this->decorated->createFromRequest(
+			$request,
+			$normalization,
+			$extractedAttributes
+		);
+
+		$context['groups'] = $context['groups'] ?? [];
 
 		$isAdmin = $this->authorizationChecker->isGranted('ROLE_ADMIN');
 
-		if ($context['groups'] && $isAdmin) {
+		if ($isAdmin) {
 			$context['groups'][] = $normalization ? 'admin:read' : 'admin:write';
 		}
+
+		$context['groups'] = array_unique($context['groups']);
 
 		return $context;
 	}
