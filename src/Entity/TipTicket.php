@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  *   collectionOperations={
- *     "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "get"={"security"="is_granted('ROLE_USER')"},
  *     "post"={"security"="is_granted('ROLE_USER')"}
  *   },
  *    itemOperations={
@@ -36,26 +36,26 @@ class TipTicket
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tipTickets")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"tip_ticket:read", "tip_ticket:write"})
+     * @Groups({"tipticket:read", "tipticket:write"})
      * @Assert\NotBlank()
      */
     private $user;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"tip_ticket:read", "tip_ticket:write"})
+     * @Groups({"tipticket:read", "tipticket:write"})
      */
     private $isPaid = false;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"tip_ticket:read"})
+     * @Groups({"tipticket:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"tip_ticket:read"})
+     * @Groups({"tipticket:read"})
      */
     private $updatedAt;
 
