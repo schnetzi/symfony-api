@@ -38,15 +38,14 @@ class TipTicketResourceTest extends CustomApiTestCase
 
 		$tipTicket = new TipTicket();
 		$tipTicket->setUser($user1);
+		$tipTicket->setIsPaid(true);
 
 		$entityManager = $this->getEntityManager();
 		$entityManager->persist($tipTicket);
 		$entityManager->flush();
 
 		$this->login($client, 'user2@test.com', 'asdf');
-		$client->request('PUT', '/api/tip_tickets/'.$tipTicket->getId(), [
-			'json' => ['isPaid' => true],
-		]);
+		$client->request('PUT', '/api/tip_tickets/'.$tipTicket->getId());
 		$this->assertResponseStatusCodeSame(403);
 
 		$this->login($client, 'user1@test.com', 'asdf');
@@ -79,5 +78,22 @@ class TipTicketResourceTest extends CustomApiTestCase
 
         $client->request('GET', '/api/tip_tickets');
         $this->assertJsonContains(['hydra:totalItems' => 2]);
+    }
+
+    public function testGetTipTicketItem() {
+        $client = self::createClient();
+        $user = $this->createUserAndLogin($client, 'user1@test.com', 'asdf');
+
+        $tipTicket1 = new TipTicket();
+        $tipTicket1->setUser($user);
+        $tipTicket1->setIsPaid(false);
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($tipTicket1);
+        $entityManager->flush();
+
+        $client->request('GET', '/api/tip_tickets/'. $tipTicket1->getId());
+        $this->assertResponseStatusCodeSame(404);
+//        $this->assertJsonContains(['hydra:totalItems' => 1]);
     }
 }
