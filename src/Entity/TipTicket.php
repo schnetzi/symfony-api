@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *    },
  * )
  * @ORM\Entity(repositoryClass=TipTicketRepository::class)
+ * @ORM\EntityListeners({"App\Doctrine\TipTicketSetUserListener"})
  */
 class TipTicket
 {

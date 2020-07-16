@@ -36,3 +36,6 @@ services:
         arguments: ['@App\ApiPlatform\AutoGroupResourceMetadataFactory.inner']
         decoration_priority: -20
 
+    App\Doctrine\TipTicketSetUserListener:
+        tags: ['doctrine.event_listener']
+

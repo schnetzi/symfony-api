@@ -9,60 +9,59 @@ use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 
-class UserNormalizer
-    implements ContextAwareNormalizerInterface, CacheableSupportsMethodInterface, NormalizerAwareInterface
+class UserNormalizer implements ContextAwareNormalizerInterface, CacheableSupportsMethodInterface, NormalizerAwareInterface
 {
-    use NormalizerAwareTrait;
+	use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
-    private $security;
+	private const ALREADY_CALLED = 'USER_NORMALIZER_ALREADY_CALLED';
+	private $security;
 
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
+	public function __construct(Security $security)
+	{
+		$this->security = $security;
+	}
 
-    /**
-     * @param User $object
-     */
-    public function normalize($object, $format = null, array $context = []): array
-    {
-        $isOwner = $this->userIsOwner($object);
-        if ($isOwner) {
-            $context['groups'][] = 'owner:read';
-        }
+	/**
+	 * @param User $object
+	 */
+	public function normalize($object, $format = null, array $context = []): array
+	{
+		$isOwner = $this->userIsOwner($object);
+		if ($isOwner) {
+			$context['groups'][] = 'owner:read';
+		}
 
-        $context[self::ALREADY_CALLED] = true;
+		$context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
-        $data['isMe'] = $isOwner;
+		$data = $this->normalizer->normalize($object, $format, $context);
+		$data['isMe'] = $isOwner;
 
-        return $data;
-    }
+		return $data;
+	}
 
-    public function supportsNormalization($data, $format = null, array $context = []): bool
-    {
-        if (isset($context[self::ALREADY_CALLED])) {
-            return false;
-        }
+	public function supportsNormalization($data, $format = null, array $context = []): bool
+	{
+		if (isset($context[self::ALREADY_CALLED])) {
+			return false;
+		}
 
-        return $data instanceof User;
-    }
+		return $data instanceof User;
+	}
 
-    public function hasCacheableSupportsMethod(): bool
-    {
-        return false;
-    }
+	public function hasCacheableSupportsMethod(): bool
+	{
+		return false;
+	}
 
-    private function userIsOwner(User $user): bool
-    {
-        /** @var User|null $authenticatedUser */
-        $authenticatedUser = $this->security->getUser();
+	private function userIsOwner(User $user): bool
+	{
+		/** @var User|null $authenticatedUser */
+		$authenticatedUser = $this->security->getUser();
 
-        if (!$authenticatedUser) {
-            return false;
-        }
+		if (!$authenticatedUser) {
+			return false;
+		}
 
-        return $authenticatedUser->getEmail() === $user->getEmail();
-    }
+		return $authenticatedUser->getEmail() === $user->getEmail();
+	}
 }
