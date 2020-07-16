@@ -89,7 +89,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"admin:read", "user:read"})
+     * @Groups({"admin:read", "owner:read"})
      */
     private $phoneNumber;
 
