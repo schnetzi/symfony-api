@@ -37,5 +37,5 @@ services:
         decoration_priority: -20
 
     App\Doctrine\TipTicketSetUserListener:
-        tags: ['doctrine.event_listener']
+        tags: ['doctrine.orm.entity_listener']
 

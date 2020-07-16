@@ -55,4 +55,29 @@ class TipTicketResourceTest extends CustomApiTestCase
 		]);
 		$this->assertResponseStatusCodeSame(200);
 	}
+
+	public function testGetTipTicketCollection() {
+	    $client = self::createClient();
+	    $user = $this->createUserAndLogin($client, 'user1@test.com', 'asdf');
+
+	    $tipTicket1 = new TipTicket();
+        $tipTicket1->setUser($user);
+        $tipTicket1->setIsPaid(true);
+
+        $tipTicket2 = new TipTicket();
+        $tipTicket2->setUser($user);
+
+        $tipTicket3 = new TipTicket();
+        $tipTicket3->setUser($user);
+        $tipTicket3->setIsPaid(true);
+
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($tipTicket1);
+        $entityManager->persist($tipTicket2);
+        $entityManager->persist($tipTicket3);
+        $entityManager->flush();
+
+        $client->request('GET', '/api/tip_tickets');
+        $this->assertJsonContains(['hydra:totalItems' => 2]);
+    }
 }
