@@ -197,6 +197,13 @@ class User implements UserInterface
         return $this->tipTickets;
     }
 
+    public function getPaidTipTickets(): Collection
+    {
+        return $this->tipTickets->filter(function (TipTicket $tipTicket) {
+            return $tipTicket->getIsPaid();
+        });
+    }
+
     public function addTipTicket(TipTicket $tipTicket): self
     {
         if (!$this->tipTickets->contains($tipTicket)) {

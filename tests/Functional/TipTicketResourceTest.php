@@ -94,6 +94,5 @@ class TipTicketResourceTest extends CustomApiTestCase
 
         $client->request('GET', '/api/tip_tickets/'. $tipTicket1->getId());
         $this->assertResponseStatusCodeSame(404);
-//        $this->assertJsonContains(['hydra:totalItems' => 1]);
     }
 }
